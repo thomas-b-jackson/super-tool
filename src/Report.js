@@ -54,8 +54,8 @@ function Row(props) {
     setSegmentIncreaseValue(newValue);
 
     persistState(row.name,"",newValue)
+    props.trigger(Math.random() < 0.5)
   };
-
 
   return (
     <React.Fragment>
@@ -106,7 +106,50 @@ function Row(props) {
   );
 }
 
+function SummaryRow(props) {
+
+  let revenueData = getRevenueData(props.segment)
+
+  console.log("summary called")
+
+  let summedRevenue = revenueData.reduce( (sum, item ) => {
+    return sum + item.revenue
+  }, 0);
+
+  let summedAdjustedRevenue = revenueData.reduce( (sum, item ) => {
+    let segmentIncreaseValue = getPersistedValue(item.name)
+
+    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue))
+  }, 0);
+
+  let summedTarget = revenueData.reduce( (sum, item ) => {
+    return sum + item.targetRevenue
+  }, 0);
+
+  let summedAOverUnder = revenueData.reduce( (sum, item ) => {
+    let segmentIncreaseValue = getPersistedValue(item.name)
+
+    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue)) - item.targetRevenue
+  }, 0);
+
+  return (
+    <React.Fragment>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        <TableCell/>
+        <TableCell component="th" scope="row">Totals</TableCell>
+        <TableCell align="right">{summedRevenue}</TableCell>
+        <TableCell align="right">n/a</TableCell>
+        <TableCell align="right">{summedAdjustedRevenue}</TableCell>
+        <TableCell align="right">{summedTarget}</TableCell>
+        <TableCell align="right">{summedAOverUnder}</TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export default function SummaryReport(props) {
+
+  const [trigger, setTrigger] = React.useState(false);
 
   return (
     <TableContainer component={Paper}>
@@ -124,8 +167,9 @@ export default function SummaryReport(props) {
         </TableHead>
         <TableBody>
           {getRevenueData(props.segment,props.salesperson).map((row) => (
-            <Row key={row.name} row={row}/>
+            <Row key={row.name} row={row} trigger={setTrigger}/>
           ))}
+          <SummaryRow segment={props.segment} trigger={trigger}/>
         </TableBody>
       </Table>
     </TableContainer>
