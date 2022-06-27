@@ -56,6 +56,8 @@ function Row(props) {
     persistState(row.name,"",newValue)
   };
 
+  // increment sums
+  props.summer(row.revenue);
 
   return (
     <React.Fragment>
@@ -106,7 +108,34 @@ function Row(props) {
   );
 }
 
+function SummaryRow(props) {
+
+  return (
+    <React.Fragment>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        <TableCell/>
+        <TableCell component="th" scope="row">Totals</TableCell>
+        <TableCell align="right">{props.sum}</TableCell>
+        <TableCell align="right">0</TableCell>
+        <TableCell align="right">0</TableCell>
+        <TableCell align="right">0</TableCell>
+        <TableCell align="right">0</TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export default function SummaryReport(props) {
+
+  class Summer  {
+    sum = 0;
+    increase = (value) => {
+      this.sum += value;
+      console.log(`sum ${this.sum}`);
+    }
+  }
+
+  let summer = new Summer()
 
   return (
     <TableContainer component={Paper}>
@@ -124,8 +153,10 @@ export default function SummaryReport(props) {
         </TableHead>
         <TableBody>
           {getRevenueData(props.segment,props.salesperson).map((row) => (
-            <Row key={row.name} row={row}/>
+            <Row key={row.name} row={row} summer={summer.increase}/>
           ))}
+          <SummaryRow sum={summer.sum}/>
+          {console.log(`sum: ${summer.sum}`)}
         </TableBody>
       </Table>
     </TableContainer>
