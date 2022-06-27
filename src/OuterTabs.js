@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {EffectiveDate,Salesperson,Segmentation} from './Inputs';
+import {Salesperson,Segmentation} from './Inputs';
 import InnerTabs from './InnerTabs';
 
 function TabPanel(props) {
@@ -49,10 +49,13 @@ export default function OuterTabs() {
   };
 
   // for segment pick
-  const [segment, setSegment] = React.useState('');
+  const [segment, setSegment] = React.useState([]);
 
   const handleSegmentChange = (event) => {
-    setSegment(event.target.value);
+    const {
+      target: { value },
+    } = event;
+    setSegment(value);
   };
 
   // for salesperson pick
