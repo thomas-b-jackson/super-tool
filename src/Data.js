@@ -6,8 +6,8 @@ export function getRevenueData(segment, salesperson, revenueDataInput) {
   let revenueData = revenueDataInput ? structuredClone(revenueDataInput) : structuredClone(revenueDataQuery)
   
   // filter by segment
-  let filteredBySegment = segment ? revenueData.filter( (item) => {
-    return item.name == segment;
+  let filteredBySegment = segment.length > 0 ? revenueData.filter( (item) => {
+    return segment.includes(item.name);
   }) : revenueData
 
   // filter accounts by salesperson
@@ -22,6 +22,14 @@ export function getRevenueData(segment, salesperson, revenueDataInput) {
     return item.accounts.length > 0;
   });
 };
+
+export function getSegments() {
+  return [
+    "T-Mobile",
+    "Microsoft",
+    "Sempra"
+  ]
+}
 
 // temporary canned data
 const revenueDataQuery = [

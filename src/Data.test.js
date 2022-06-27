@@ -12,7 +12,6 @@ test('empty segment returns all data', () => {
 
 test('salesperson filtering works', () => {
   let data = getRevenueData("","janey",revenueData);
-  console.log(data)
   expect(data.length==1 && data[0].accounts.length==1);
 });
 

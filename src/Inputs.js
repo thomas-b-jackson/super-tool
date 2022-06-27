@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
+import { useTheme } from '@mui/material/styles';
+import {getSegments} from './Data';
 
 function EffectiveDate() {
   const [effectiveDate, setEffectiveDate] = React.useState('');
@@ -56,7 +58,30 @@ function Salesperson(props) {
   );
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(segment, segments, theme) {
+
+  return {
+    fontWeight:
+      segments.indexOf(segment) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightBold,
+  };
+}
+
 function Segmentation(props) {
+
+  const theme = useTheme()
 
   return (
     <Box sx={{ minWidth: 150 }}>
@@ -66,13 +91,20 @@ function Segmentation(props) {
           labelId="segmentation-label"
           id="segmentation"
           label="Segmentation"
+          multiple
           onChange={props.changer}
           value={props.value}
+          MenuProps={MenuProps}
         >
-          <MenuItem value=""><em>None</em></MenuItem>
-          <MenuItem value="T-Mobile">T-Mobile</MenuItem>
-          <MenuItem value="Microsoft">Microsoft</MenuItem>
-          <MenuItem value="Sempra">Sempra</MenuItem>
+          {getSegments().map((segment) => (
+            <MenuItem
+              key={segment}
+              value={segment}
+              style={getStyles(segment, props.value, theme)}
+            >
+              {segment}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>
