@@ -17,7 +17,10 @@ import {PercentIncrease} from './Inputs';
 import {getRevenueData} from './Data';
 import {persistState,getPersistedValue} from './store';
 
-function AccountRow(accountRow, segment) {
+function AccountRow(props) {
+
+  let segment = props.segment
+  let accountRow = props.row
 
   // for account sliders
   const [accountIncreaseValue, setAccountIncreaseValue] = React.useState(getPersistedValue(segment,accountRow.account));
@@ -98,7 +101,9 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.accounts.map((accountRow) => (AccountRow(accountRow, row.name)))}
+                  {row.accounts.map((accountRow) => (
+                    <AccountRow row={accountRow} segment={row.name}/>
+                  ))}
                 </TableBody>
               </Table>
             </Box>
