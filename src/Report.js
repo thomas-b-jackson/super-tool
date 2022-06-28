@@ -53,8 +53,11 @@ function Row(props) {
   const handleSegmentChange = (event, newValue) => {
     setSegmentIncreaseValue(newValue);
 
+    // persist changes
     persistState(row.name,"",newValue)
-    props.trigger(Math.random() < 0.5)
+
+    // trigger a refresh of the totals based on this new increase value
+    props.summaryTrigger(newValue)
   };
 
   return (
@@ -149,7 +152,8 @@ function SummaryRow(props) {
 
 export default function SummaryReport(props) {
 
-  const [trigger, setTrigger] = React.useState(false);
+  // for triggering refreshes of the totals row based on slider changes
+  const [trigger, setTrigger] = React.useState(0);
 
   return (
     <TableContainer component={Paper}>
@@ -167,7 +171,7 @@ export default function SummaryReport(props) {
         </TableHead>
         <TableBody>
           {getRevenueData(props.segment,props.salesperson).map((row) => (
-            <Row key={row.name} row={row} trigger={setTrigger}/>
+            <Row key={row.name} row={row} summaryTrigger={setTrigger}/>
           ))}
           <SummaryRow segment={props.segment} trigger={trigger}/>
         </TableBody>
