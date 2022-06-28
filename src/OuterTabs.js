@@ -48,14 +48,14 @@ export default function OuterTabs() {
     setValue(newValue);
   };
 
-  // for segment pick
-  const [segment, setSegment] = React.useState([]);
+  // for segments pick list
+  const [segments, setSegments] = React.useState([]);
 
   const handleSegmentChange = (event) => {
     const {
       target: { value },
     } = event;
-    setSegment(value);
+    setSegments(value);
   };
 
   // for salesperson pick
@@ -77,10 +77,10 @@ export default function OuterTabs() {
       <TabPanel value={value} index={0}>
         <Stack direction="row" spacing={2}>
           <Stack spacing={2}>
-            <Segmentation changer={handleSegmentChange} value={segment}/>
+            <Segmentation changer={handleSegmentChange} value={segments}/>
             <Salesperson changer={handleSalespersonChange} value={salesperson}/>
           </Stack>
-          <InnerTabs segment={segment} salesperson={salesperson}/>
+          <InnerTabs segments={segments} salesperson={salesperson}/>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index={1}>

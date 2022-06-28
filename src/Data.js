@@ -1,4 +1,4 @@
-export function getRevenueData(segment, salesperson, revenueDataInput) {
+export function getRevenueData(segments, salesperson, revenueDataInput) {
 
   // input revenue data to support unit testing, o.w. get
   // data from query
@@ -6,14 +6,14 @@ export function getRevenueData(segment, salesperson, revenueDataInput) {
   let revenueData = revenueDataInput ? structuredClone(revenueDataInput) : structuredClone(revenueDataQuery)
   
   // filter by segment
-  let filteredBySegment = segment.length > 0 ? revenueData.filter( (item) => {
-    return segment.includes(item.name);
+  let filteredBySegment = segments.length > 0 ? revenueData.filter( (item) => {
+    return segments.includes(item.name);
   }) : revenueData
 
   // filter accounts by salesperson
   filteredBySegment.forEach((item)=>{
     item.accounts = salesperson ?  item.accounts.filter( (account) => {
-      return account.salesperson == salesperson;
+      return account.salesperson === salesperson;
     }) : item.accounts;
   })
 
@@ -35,8 +35,6 @@ export function getSegments() {
 const revenueDataQuery = [
   {
     "name": "T-Mobile",
-    "revenue": 159,
-    "targetRevenue": 170,
     "accounts": [
       {
         account: 'atlas',
@@ -56,8 +54,6 @@ const revenueDataQuery = [
   },
   {
     "name": "Microsoft",
-    "revenue": 237,
-    "targetRevenue": 250,
     "accounts": [
       {
         account: 'digital marketing',
@@ -77,8 +73,6 @@ const revenueDataQuery = [
   },
   {
     "name": "Sempra",
-    "revenue": 262,
-    "targetRevenue": 166,
     "accounts": [
       {
         account: 'myaccount re-arch',

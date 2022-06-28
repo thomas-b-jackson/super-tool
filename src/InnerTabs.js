@@ -56,7 +56,7 @@ export default function InnerTabs(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <SummaryReport segment={props.segment} salesperson={props.salesperson}/>
+        <SummaryReport segments={props.segments} salesperson={props.salesperson}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         TBD

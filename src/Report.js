@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -17,38 +16,45 @@ import {PercentIncrease} from './Inputs';
 import {getRevenueData} from './Data';
 import {persistState,getPersistedValue} from './store';
 
-function AccountRow(props) {
+function getSums(segmentData) {
 
-  let segment = props.segment
-  let accountRow = props.row
+  let sums = {}
 
-  // for account sliders
-  const [accountIncreaseValue, setAccountIncreaseValue] = React.useState(getPersistedValue(segment,accountRow.account));
+  // sum revenue
+  sums["Revenue"] = segmentData.reduce( (sum, item) => {
+    return item.accounts.reduce( (sum, account ) => {
+      return sum + account.revenue
+    }, 0)}, 0)
 
-  const handleAccountChange = (event, newValue) => {
-    setAccountIncreaseValue(newValue);
-    persistState(segment,accountRow.account,newValue)
-  };
+  // sum adjusted revenue
+  sums["AdjustedRevenue"] = segmentData.reduce( (sum, segment) => {
 
-  return (
-    <TableRow key={accountRow.account}>
-      <TableCell component="th" scope="row">{accountRow.account}</TableCell>
-      <TableCell>{accountRow.revenue}</TableCell>
-      <TableCell align="right"><PercentIncrease changer={handleAccountChange} default={accountIncreaseValue}/></TableCell>
-      <TableCell align="right">{getAdjustedRevenue(accountRow.revenue,accountIncreaseValue)}</TableCell>
-      <TableCell align="right">{accountRow.targetRevenue}</TableCell>
-      <TableCell align="right">{getAdjustedRevenue(accountRow.revenue,accountIncreaseValue)-accountRow.targetRevenue}</TableCell>
-    </TableRow>
-  )
+    // calc adjusted revenue accross accounts
+    let summedAdjustedRevenue = segment.accounts.reduce( (sum, account ) => {
+      let accountIncreaseValue = getPersistedValue(segment.name, account.account)
+      // console.log(`${segment.name}/${account.account} increase: ${accountIncreaseValue}`)
+      return sum + parseInt(getAdjustedRevenue(account.revenue,accountIncreaseValue)) 
+    }, 0)
+
+    // console.log(`${segment.name} adjusted rev: ${summedAdjustedRevenue}`)
+
+    // next apply to segment
+    let segmentIncreaseValue = getPersistedValue(segment.name)
+    return sum + parseInt(getAdjustedRevenue(summedAdjustedRevenue,segmentIncreaseValue))
+  }, 0);
+
+  // sum target revenue 
+  sums["TargetRevenue"] =segmentData.reduce( (sum, item) => {
+    return item.accounts.reduce( (sum, account ) => {
+      return sum + account.targetRevenue
+    }, 0)}, 0)
+
+  return sums
 }
 
-const getAdjustedRevenue = (revenue, increasePercent) => {
-  return increasePercent ? (revenue * (1+increasePercent/100)).toFixed(): revenue;
-};
+function SegmentRow(props) {
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  let row = props.row;
 
   // for segment sliders
   const [segmentIncreaseValue, setSegmentIncreaseValue] = React.useState(getPersistedValue(row.name,""));
@@ -63,25 +69,87 @@ function Row(props) {
     props.summaryTrigger(newValue)
   };
 
+  let sums = getSums([row])
+
+  return (
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell>
+        <IconButton
+          aria-label="expand row"
+          size="small"
+          onClick={() => props.setOpen(!(props.open))}
+        >
+          {props.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </TableCell>
+      <TableCell component="th" scope="row">{row.name}</TableCell>
+      <TableCell align="right">{sums["Revenue"]}</TableCell>
+      <TableCell align="right"><PercentIncrease value={segmentIncreaseValue} changer={handleSegmentChange} default={segmentIncreaseValue}/></TableCell>
+      <TableCell align="right">{sums["AdjustedRevenue"]}</TableCell>
+      <TableCell align="right">{sums["TargetRevenue"]}</TableCell>
+      <TableCell align="right">{sums["AdjustedRevenue"]-sums["TargetRevenue"]}</TableCell>
+    </TableRow>
+  )
+}
+
+function AccountRow(props) {
+
+  let segment = props.segment
+  let accountRow = props.row
+
+  // for account sliders
+  const [accountIncreaseValue, setAccountIncreaseValue] = React.useState(getPersistedValue(segment,accountRow.account));
+
+  const handleAccountChange = (event, newValue) => {
+    setAccountIncreaseValue(newValue);
+    persistState(segment,accountRow.account,newValue)
+    props.summaryTrigger(newValue)
+  };
+
+  return (
+    <TableRow key={accountRow.account}>
+      <TableCell component="th" scope="row">{accountRow.account}</TableCell>
+      <TableCell>{accountRow.revenue}</TableCell>
+      <TableCell align="right"><PercentIncrease value={accountIncreaseValue} changer={handleAccountChange} default={accountIncreaseValue}/></TableCell>
+      <TableCell align="right">{getAdjustedRevenue(accountRow.revenue,accountIncreaseValue)}</TableCell>
+      <TableCell align="right">{accountRow.targetRevenue}</TableCell>
+      <TableCell align="right">{getAdjustedRevenue(accountRow.revenue,accountIncreaseValue)-accountRow.targetRevenue}</TableCell>
+    </TableRow>
+  )
+}
+
+function TotalsRow(props) {
+
+  let revenueData = getRevenueData(props.segments, props.salesperson)
+
+  let sums = getSums(revenueData)
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">{row.name}</TableCell>
-        <TableCell align="right">{row.revenue}</TableCell>
-        <TableCell align="right"><PercentIncrease id={row.name} changer={handleSegmentChange} default={segmentIncreaseValue}/></TableCell>
-        <TableCell align="right">{getAdjustedRevenue(row.revenue,segmentIncreaseValue)}</TableCell>
-        <TableCell align="right">{row.targetRevenue}</TableCell>
-        <TableCell align="right">{getAdjustedRevenue(row.revenue,segmentIncreaseValue)-row.targetRevenue}</TableCell>
+        <TableCell/>
+        <TableCell component="th" scope="row">Totals</TableCell>
+        <TableCell align="right">{sums["Revenue"]}</TableCell>
+        <TableCell align="right">n/a</TableCell>
+        <TableCell align="right">{sums["AdjustedRevenue"]}</TableCell>
+        <TableCell align="right">{sums["TargetRevenue"]}</TableCell>
+        <TableCell align="right">{sums["AdjustedRevenue"]-sums["TargetRevenue"]}</TableCell>
       </TableRow>
+    </React.Fragment>
+  );
+}
+
+const getAdjustedRevenue = (revenue, increasePercent) => {
+  return increasePercent ? (revenue * (1+increasePercent/100)).toFixed(): revenue;
+};
+
+function Row(props) {
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <React.Fragment>
+      <SegmentRow row={row} open={open} setOpen={setOpen} summaryTrigger={props.summaryTrigger}/>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -102,54 +170,13 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   {row.accounts.map((accountRow) => (
-                    <AccountRow row={accountRow} segment={row.name}/>
+                    <AccountRow row={accountRow} segment={row.name} summaryTrigger={props.summaryTrigger}/>
                   ))}
                 </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
-function SummaryRow(props) {
-
-  let revenueData = getRevenueData(props.segment)
-
-  console.log("summary called")
-
-  let summedRevenue = revenueData.reduce( (sum, item ) => {
-    return sum + item.revenue
-  }, 0);
-
-  let summedAdjustedRevenue = revenueData.reduce( (sum, item ) => {
-    let segmentIncreaseValue = getPersistedValue(item.name)
-
-    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue))
-  }, 0);
-
-  let summedTarget = revenueData.reduce( (sum, item ) => {
-    return sum + item.targetRevenue
-  }, 0);
-
-  let summedAOverUnder = revenueData.reduce( (sum, item ) => {
-    let segmentIncreaseValue = getPersistedValue(item.name)
-
-    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue)) - item.targetRevenue
-  }, 0);
-
-  return (
-    <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell/>
-        <TableCell component="th" scope="row">Totals</TableCell>
-        <TableCell align="right">{summedRevenue}</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">{summedAdjustedRevenue}</TableCell>
-        <TableCell align="right">{summedTarget}</TableCell>
-        <TableCell align="right">{summedAOverUnder}</TableCell>
       </TableRow>
     </React.Fragment>
   );
@@ -175,10 +202,10 @@ export default function SummaryReport(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {getRevenueData(props.segment,props.salesperson).map((row) => (
+          {getRevenueData(props.segments,props.salesperson).map((row) => (
             <Row key={row.name} row={row} summaryTrigger={setTrigger}/>
           ))}
-          <SummaryRow segment={props.segment} trigger={trigger}/>
+          <TotalsRow segments={props.segments} salesperson={props.salesperson} trigger={trigger}/>
         </TableBody>
       </Table>
     </TableContainer>
