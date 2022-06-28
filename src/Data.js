@@ -42,13 +42,15 @@ const revenueDataQuery = [
         account: 'atlas',
         revenue: 10,
         targetRevenue: 13,
-        salesperson: "jane"
+        salesperson: "jane",
+        practice: "digital transformation"
       },
       {
         account: 'expert assist',
         revenue: 52,
         targetRevenue: 60,
-        salesperson: "jane"
+        salesperson: "jane",
+        practice: "digital transformation"
       }
     ]
   },
@@ -61,13 +63,15 @@ const revenueDataQuery = [
         account: 'digital marketing',
         revenue: 19,
         targetRevenue: 18,
-        salesperson: "joe"
+        salesperson: "joe",
+        practice: "advanced analytics"
       },
       {
         account: 'azure analytics',
         revenue: 6,
         targetRevenue: 8,
-        salesperson: "joey"
+        salesperson: "joey",
+        practice: "advanced analytics"
       }
     ]
   },
@@ -80,13 +84,15 @@ const revenueDataQuery = [
         account: 'myaccount re-arch',
         revenue: 99,
         targetRevenue: 105,
-        salesperson: "ben"
+        salesperson: "ben",
+        practice: "digital transformation"
       },
       {
         account: 'digital fortress',
         revenue: 4,
         targetRevenue: 5,
-        salesperson: "ben"
+        salesperson: "ben",
+        practice: "digital transformation"
       }
     ]
   }

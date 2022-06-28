@@ -17,7 +17,10 @@ import {PercentIncrease} from './Inputs';
 import {getRevenueData} from './Data';
 import {persistState,getPersistedValue} from './store';
 
-function AccountRow(accountRow, segment) {
+function AccountRow(props) {
+
+  let segment = props.segment
+  let accountRow = props.row
 
   // for account sliders
   const [accountIncreaseValue, setAccountIncreaseValue] = React.useState(getPersistedValue(segment,accountRow.account));
@@ -53,9 +56,12 @@ function Row(props) {
   const handleSegmentChange = (event, newValue) => {
     setSegmentIncreaseValue(newValue);
 
+    // persist changes
     persistState(row.name,"",newValue)
-  };
 
+    // trigger a refresh of the totals based on this new increase value
+    props.summaryTrigger(newValue)
+  };
 
   return (
     <React.Fragment>
@@ -95,7 +101,9 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.accounts.map((accountRow) => (AccountRow(accountRow, row.name)))}
+                  {row.accounts.map((accountRow) => (
+                    <AccountRow row={accountRow} segment={row.name}/>
+                  ))}
                 </TableBody>
               </Table>
             </Box>
@@ -106,7 +114,51 @@ function Row(props) {
   );
 }
 
+function SummaryRow(props) {
+
+  let revenueData = getRevenueData(props.segment)
+
+  console.log("summary called")
+
+  let summedRevenue = revenueData.reduce( (sum, item ) => {
+    return sum + item.revenue
+  }, 0);
+
+  let summedAdjustedRevenue = revenueData.reduce( (sum, item ) => {
+    let segmentIncreaseValue = getPersistedValue(item.name)
+
+    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue))
+  }, 0);
+
+  let summedTarget = revenueData.reduce( (sum, item ) => {
+    return sum + item.targetRevenue
+  }, 0);
+
+  let summedAOverUnder = revenueData.reduce( (sum, item ) => {
+    let segmentIncreaseValue = getPersistedValue(item.name)
+
+    return sum + parseInt(getAdjustedRevenue(item.revenue,segmentIncreaseValue)) - item.targetRevenue
+  }, 0);
+
+  return (
+    <React.Fragment>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        <TableCell/>
+        <TableCell component="th" scope="row">Totals</TableCell>
+        <TableCell align="right">{summedRevenue}</TableCell>
+        <TableCell align="right">n/a</TableCell>
+        <TableCell align="right">{summedAdjustedRevenue}</TableCell>
+        <TableCell align="right">{summedTarget}</TableCell>
+        <TableCell align="right">{summedAOverUnder}</TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export default function SummaryReport(props) {
+
+  // for triggering refreshes of the totals row based on slider changes
+  const [trigger, setTrigger] = React.useState(0);
 
   return (
     <TableContainer component={Paper}>
@@ -124,8 +176,9 @@ export default function SummaryReport(props) {
         </TableHead>
         <TableBody>
           {getRevenueData(props.segment,props.salesperson).map((row) => (
-            <Row key={row.name} row={row}/>
+            <Row key={row.name} row={row} summaryTrigger={setTrigger}/>
           ))}
+          <SummaryRow segment={props.segment} trigger={trigger}/>
         </TableBody>
       </Table>
     </TableContainer>
