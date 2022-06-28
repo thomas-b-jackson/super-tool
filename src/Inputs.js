@@ -131,6 +131,7 @@ export default function PercentIncrease(props) {
     <Box sx={{ width: 30 , display: 'inline-block'}}>
       <Slider
         aria-label="Always visible"
+        value={props.value}
         defaultValue={props.default}
         getAriaValueText={valuetext}
         step={5}
