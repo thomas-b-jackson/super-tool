@@ -83,11 +83,11 @@ function SegmentRow(props) {
         </IconButton>
       </TableCell>
       <TableCell component="th" scope="row">{row.name}</TableCell>
-      <TableCell align="right">{sums["Revenue"]}</TableCell>
+      <TableCell align="right">{sums.Revenue}</TableCell>
       <TableCell align="right"><PercentIncrease value={segmentIncreaseValue} changer={handleSegmentChange} default={segmentIncreaseValue}/></TableCell>
-      <TableCell align="right">{sums["AdjustedRevenue"]}</TableCell>
-      <TableCell align="right">{sums["TargetRevenue"]}</TableCell>
-      <TableCell align="right">{sums["AdjustedRevenue"]-sums["TargetRevenue"]}</TableCell>
+      <TableCell align="right">{sums.AdjustedRevenue}</TableCell>
+      <TableCell align="right">{sums.TargetRevenue}</TableCell>
+      <TableCell align="right">{sums.KeyboardArrowDownIconAdjustedRevenue-sums.TargetRevenue}</TableCell>
     </TableRow>
   )
 }
@@ -129,11 +129,11 @@ function TotalsRow(props) {
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell/>
         <TableCell component="th" scope="row">Totals</TableCell>
-        <TableCell align="right">{sums["Revenue"]}</TableCell>
+        <TableCell align="right">{sums.Revenue}</TableCell>
         <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">{sums["AdjustedRevenue"]}</TableCell>
-        <TableCell align="right">{sums["TargetRevenue"]}</TableCell>
-        <TableCell align="right">{sums["AdjustedRevenue"]-sums["TargetRevenue"]}</TableCell>
+        <TableCell align="right">{sums.AdjustedRevenue}</TableCell>
+        <TableCell align="right">{sums.TargetRevenue}</TableCell>
+        <TableCell align="right">{sums.AdjustedRevenue-sums.TargetRevenue}</TableCell>
       </TableRow>
     </React.Fragment>
   );
