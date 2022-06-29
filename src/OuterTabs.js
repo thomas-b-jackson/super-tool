@@ -5,8 +5,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segmentation} from './Inputs';
-import InnerTabs from './InnerTabs';
+import {Salesperson,Segmentation,DateRanger} from './Inputs';
+import ReportTabs from './ReportTabs';
+import { addDays } from 'date-fns';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,6 +66,19 @@ export default function OuterTabs() {
     setSalesperson(event.target.value);
   };
 
+  // for date range pick
+  const [dateRange, setDateRange] = React.useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: 'selection'
+    }
+  ]);
+
+  const handleDateRateChange = (dateRange) => {
+    setDateRange(dateRange);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -80,7 +94,10 @@ export default function OuterTabs() {
             <Segmentation changer={handleSegmentChange} value={segments}/>
             <Salesperson changer={handleSalespersonChange} value={salesperson}/>
           </Stack>
-          <InnerTabs segments={segments} salesperson={salesperson}/>
+          <Stack spacing={2}>
+            <DateRanger dateRange={dateRange} setDateRange={handleDateRateChange}/>
+            <ReportTabs segments={segments} salesperson={salesperson}/>
+          </Stack>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index={1}>

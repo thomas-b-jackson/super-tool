@@ -7,6 +7,15 @@ import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
 import {getSegments} from './Data';
+import { DateRange } from 'react-date-range';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// for styling the date range picker
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 function EffectiveDate() {
   const [effectiveDate, setEffectiveDate] = React.useState('');
@@ -126,7 +135,7 @@ function valuetext(value) {
   return `${value}%`;
 }
 
-export default function PercentIncrease(props) {
+function PercentIncrease(props) {
   return (
     <Box sx={{ width: 30 , display: 'inline-block'}}>
       <Slider
@@ -143,4 +152,30 @@ export default function PercentIncrease(props) {
   );
 }
 
-export {Salesperson,EffectiveDate,Segmentation,PercentIncrease}
+function DateRanger(props) {
+  
+  return (
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography>Change Date Range</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <DateRange
+            class="content"
+            editableDateInputs={true}
+            onChange={item => props.setDateRange([item.selection])}
+            moveRangeOnFirstSelection={false}
+            ranges={props.dateRange}
+            months={2}
+            direction="horizontal"
+          />
+      </AccordionDetails>
+    </Accordion>
+  );
+}
+
+export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,DateRanger}
