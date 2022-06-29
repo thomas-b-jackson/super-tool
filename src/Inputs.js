@@ -155,6 +155,7 @@ function MonthYearPicker(props) {
         views={['year', 'month']}
         label={props.label}
         minDate={props.minDate}
+        maxDate={new Date(new Date(props.minDate).setFullYear(props.minDate.getFullYear()+2))}
         value={props.date}
         onChange={(newValue) => {
           props.setDate(newValue);
