@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import SummaryReport from './Report';
+import ReportTabs from './ReportTabs';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,31 +39,43 @@ function a11yProps(index) {
   };
 }
 
-export default function InnerTabs(props) {
+export default function DateTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  function getMonthYears(startDateTime, stopDateTime) {
+    let monthYearDateTimeArray = [];
+    let currentDateTime = new Date(startDateTime);
+    while (currentDateTime <= stopDateTime) {
+      monthYearDateTimeArray.push(new Date(currentDateTime));
+      currentDateTime = new Date(currentDateTime.setMonth(currentDateTime.getMonth()+1));
+    }
+
+    // reduce month array to strings 
+    return monthYearDateTimeArray.map((item) => {
+      return `${item.toLocaleString('default', { month: 'short' })} ${item.getFullYear()}`
+    });
+  }
+
+  console.log(`${props.startDate} ${props.endDate}`)
+  console.log(getMonthYears(props.startDate,props.endDate))
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="inner-tabs">
-          <Tab label="By Reveue" {...a11yProps(0)} />
-          <Tab label="By Margin%" {...a11yProps(1)} />
-          <Tab label="By Margin" {...a11yProps(2)} />
+          {getMonthYears(props.startDate,props.endDate).map((row, index) => (
+              <Tab key={row} label={row} {...a11yProps(index)}/>
+            ))}          
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <SummaryReport segments={props.segments} salesperson={props.salesperson}/>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        TBD
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        TBD
-      </TabPanel>
+      {getMonthYears(props.startDate,props.endDate).map((row, index) => (
+        <TabPanel key={row} value={value} index={index}>
+          <ReportTabs key={props.segments} date={row} segments={props.segments} salesperson={props.salesperson} />
+        </TabPanel>
+      ))}
     </Box>
   );
 }

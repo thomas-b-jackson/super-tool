@@ -107,7 +107,7 @@ function AccountRow(props) {
   };
 
   return (
-    <TableRow key={accountRow.account}>
+    <TableRow key={props.segment-accountRow.account}>
       <TableCell component="th" scope="row">{accountRow.account}</TableCell>
       <TableCell>{accountRow.revenue}</TableCell>
       <TableCell align="right"><PercentIncrease value={accountIncreaseValue} changer={handleAccountChange} default={accountIncreaseValue}/></TableCell>

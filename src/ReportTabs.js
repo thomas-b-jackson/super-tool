@@ -50,7 +50,7 @@ export default function InnerTabs(props) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="inner-tabs">
-          <Tab label="By Reveue" {...a11yProps(0)} />
+          <Tab label="By Revenue" {...a11yProps(0)} />
           <Tab label="By Margin%" {...a11yProps(1)} />
           <Tab label="By Margin" {...a11yProps(2)} />
         </Tabs>

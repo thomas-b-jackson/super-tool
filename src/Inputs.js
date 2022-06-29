@@ -7,15 +7,10 @@ import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
 import {getSegments} from './Data';
-import { DateRange } from 'react-date-range';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// for styling the date range picker
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 function EffectiveDate() {
   const [effectiveDate, setEffectiveDate] = React.useState('');
@@ -152,30 +147,22 @@ function PercentIncrease(props) {
   );
 }
 
-function DateRanger(props) {
-  
+function MonthYearPicker(props) {
+
   return (
-    <Accordion>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography>Change Date Range</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <DateRange
-            class="content"
-            editableDateInputs={true}
-            onChange={item => props.setDateRange([item.selection])}
-            moveRangeOnFirstSelection={false}
-            ranges={props.dateRange}
-            months={2}
-            direction="horizontal"
-          />
-      </AccordionDetails>
-    </Accordion>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        views={['year', 'month']}
+        label={props.label}
+        minDate={new Date()}
+        value={props.date}
+        onChange={(newValue) => {
+          props.setDate(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} helperText={null} />}
+      />
+    </LocalizationProvider>
   );
 }
 
-export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,DateRanger}
+export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,MonthYearPicker}

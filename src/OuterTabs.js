@@ -5,9 +5,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segmentation,DateRanger} from './Inputs';
-import ReportTabs from './ReportTabs';
-import { addDays } from 'date-fns';
+import {Salesperson,Segmentation,MonthYearPicker} from './Inputs';
+import DateTabs from './DateTabs';
+// import { addDays } from 'date-fns';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,17 +66,19 @@ export default function OuterTabs() {
     setSalesperson(event.target.value);
   };
 
-  // for date range pick
-  const [dateRange, setDateRange] = React.useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: 'selection'
-    }
-  ]);
+  // for date picks
+  const [startDate, setStartDate] = React.useState(new Date());
 
-  const handleDateRateChange = (dateRange) => {
-    setDateRange(dateRange);
+  const handleStartDateChange = (startDate) => {
+    setStartDate(startDate);
+    console.log(`start: ${startDate}`)
+  };
+
+  const [endDate, setEndDate] = React.useState(new Date());
+
+  const handleEndDateChange = (endDate) => {
+    setEndDate(endDate);
+    console.log(`end: ${endDate}`)
   };
 
   return (
@@ -95,8 +97,11 @@ export default function OuterTabs() {
             <Salesperson changer={handleSalespersonChange} value={salesperson}/>
           </Stack>
           <Stack spacing={2}>
-            <DateRanger dateRange={dateRange} setDateRange={handleDateRateChange}/>
-            <ReportTabs segments={segments} salesperson={salesperson}/>
+            <Stack direction="row" spacing={2}>
+              <MonthYearPicker label="Start Date" date={startDate} setDate={handleStartDateChange} />
+              <MonthYearPicker label="End Date" date={endDate} setDate={handleEndDateChange}/>
+            </Stack>
+            <DateTabs startDate={startDate} endDate={endDate} segments={segments} salesperson={salesperson}/>
           </Stack>
         </Stack>
       </TabPanel>
