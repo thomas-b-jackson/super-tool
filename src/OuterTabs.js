@@ -98,8 +98,8 @@ export default function OuterTabs() {
           </Stack>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2}>
-              <MonthYearPicker label="Start Date" date={startDate} setDate={handleStartDateChange} />
-              <MonthYearPicker label="End Date" date={endDate} setDate={handleEndDateChange}/>
+              <MonthYearPicker label="Start Date" date={startDate} setDate={handleStartDateChange} minDate={new Date()}/>
+              <MonthYearPicker label="End Date" date={endDate} setDate={handleEndDateChange} minDate={startDate}/>
             </Stack>
             <DateTabs startDate={startDate} endDate={endDate} segments={segments} salesperson={salesperson}/>
           </Stack>

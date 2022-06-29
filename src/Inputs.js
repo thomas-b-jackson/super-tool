@@ -154,7 +154,7 @@ function MonthYearPicker(props) {
       <DatePicker
         views={['year', 'month']}
         label={props.label}
-        minDate={new Date()}
+        minDate={props.minDate}
         value={props.date}
         onChange={(newValue) => {
           props.setDate(newValue);

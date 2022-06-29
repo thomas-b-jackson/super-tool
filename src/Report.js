@@ -192,11 +192,6 @@ export default function SummaryReport(props) {
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell align="center" colSpan={9}>
-              <Typography>date tabs</Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
             <TableCell />
             <TableCell>Segmentation</TableCell>
             <TableCell align="right">Current Revenue</TableCell>
