@@ -143,5 +143,4 @@ export default function PercentIncrease(props) {
   );
 }
 
-
 export {Salesperson,EffectiveDate,Segmentation,PercentIncrease}

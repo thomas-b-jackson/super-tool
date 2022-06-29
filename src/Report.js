@@ -2,6 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTheme } from '@mui/material/styles';
 import {PercentIncrease} from './Inputs';
 import {getRevenueData} from './Data';
 import {persistState,getPersistedValue} from './store';
@@ -187,10 +190,26 @@ export default function SummaryReport(props) {
   // for triggering refreshes of the totals row based on slider changes
   const [trigger, setTrigger] = React.useState(0);
 
+  const theme = useTheme()
+
+  let onClick = (event, value) => {
+    alert(JSON.stringify(value));
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
+          <TableRow>
+            <TableCell align="center" colSpan={9} style={{fontWeight:theme.typography.fontWeightBold}}>
+              <ButtonGroup variant="contained" aria-label="outlined primary button group" onClick={onClick}>
+                <Button>June</Button>
+                <Button>July</Button>
+                <Button>Aug</Button>
+                <Button>Sept</Button>
+              </ButtonGroup>
+            </TableCell>
+          </TableRow>
           <TableRow>
             <TableCell />
             <TableCell>Segmentation</TableCell>
