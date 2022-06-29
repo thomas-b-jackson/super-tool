@@ -87,7 +87,7 @@ function SegmentRow(props) {
       <TableCell align="right"><PercentIncrease value={segmentIncreaseValue} changer={handleSegmentChange} default={segmentIncreaseValue}/></TableCell>
       <TableCell align="right">{sums.AdjustedRevenue}</TableCell>
       <TableCell align="right">{sums.TargetRevenue}</TableCell>
-      <TableCell align="right">{sums.KeyboardArrowDownIconAdjustedRevenue-sums.TargetRevenue}</TableCell>
+      <TableCell align="right">{sums.AdjustedRevenue-sums.TargetRevenue}</TableCell>
     </TableRow>
   )
 }
