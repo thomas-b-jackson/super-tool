@@ -90,11 +90,11 @@ function Segmentation(props) {
   return (
     <Box sx={{ minWidth: 150 }}>
       <FormControl fullWidth>
-        <InputLabel id="segmentation-label">Segmentation</InputLabel>
+        <InputLabel id="segmentation-label">Segment</InputLabel>
         <Select
-          labelId="segmentation-label"
-          id="segmentation"
-          label="Segmentation"
+          labelId="segment-label"
+          id="segment"
+          label="Segment"
           multiple
           onChange={props.changer}
           value={props.value}

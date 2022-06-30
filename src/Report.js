@@ -193,7 +193,7 @@ export default function SummaryReport(props) {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Segmentation</TableCell>
+            <TableCell>Segment</TableCell>
             <TableCell align="right">Current Revenue</TableCell>
             <TableCell align="right">Revenue Increase%</TableCell>
             <TableCell align="right">Adjusted Revenue</TableCell>
