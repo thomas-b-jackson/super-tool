@@ -7,6 +7,10 @@ import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
 import {getSegments} from './Data';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 function EffectiveDate() {
   const [effectiveDate, setEffectiveDate] = React.useState('');
@@ -86,11 +90,11 @@ function Segmentation(props) {
   return (
     <Box sx={{ minWidth: 150 }}>
       <FormControl fullWidth>
-        <InputLabel id="segmentation-label">Segmentation</InputLabel>
+        <InputLabel id="segmentation-label">Segment</InputLabel>
         <Select
-          labelId="segmentation-label"
-          id="segmentation"
-          label="Segmentation"
+          labelId="segment-label"
+          id="segment"
+          label="Segment"
           multiple
           onChange={props.changer}
           value={props.value}
@@ -126,7 +130,7 @@ function valuetext(value) {
   return `${value}%`;
 }
 
-export default function PercentIncrease(props) {
+function PercentIncrease(props) {
   return (
     <Box sx={{ width: 30 , display: 'inline-block'}}>
       <Slider
@@ -143,5 +147,23 @@ export default function PercentIncrease(props) {
   );
 }
 
+function MonthYearPicker(props) {
 
-export {Salesperson,EffectiveDate,Segmentation,PercentIncrease}
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        views={['year', 'month']}
+        label={props.label}
+        minDate={props.minDate}
+        maxDate={new Date(new Date(props.minDate).setFullYear(props.minDate.getFullYear()+2))}
+        value={props.date}
+        onChange={(newValue) => {
+          props.setDate(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} helperText={null} />}
+      />
+    </LocalizationProvider>
+  );
+}
+
+export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,MonthYearPicker}

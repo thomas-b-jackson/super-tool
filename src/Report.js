@@ -87,7 +87,7 @@ function SegmentRow(props) {
       <TableCell align="right"><PercentIncrease value={segmentIncreaseValue} changer={handleSegmentChange} default={segmentIncreaseValue}/></TableCell>
       <TableCell align="right">{sums.AdjustedRevenue}</TableCell>
       <TableCell align="right">{sums.TargetRevenue}</TableCell>
-      <TableCell align="right">{sums.KeyboardArrowDownIconAdjustedRevenue-sums.TargetRevenue}</TableCell>
+      <TableCell align="right">{sums.AdjustedRevenue-sums.TargetRevenue}</TableCell>
     </TableRow>
   )
 }
@@ -107,7 +107,7 @@ function AccountRow(props) {
   };
 
   return (
-    <TableRow key={accountRow.account}>
+    <TableRow key={props.segment-accountRow.account}>
       <TableCell component="th" scope="row">{accountRow.account}</TableCell>
       <TableCell>{accountRow.revenue}</TableCell>
       <TableCell align="right"><PercentIncrease value={accountIncreaseValue} changer={handleAccountChange} default={accountIncreaseValue}/></TableCell>
@@ -193,7 +193,7 @@ export default function SummaryReport(props) {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Segmentation</TableCell>
+            <TableCell>Segment</TableCell>
             <TableCell align="right">Current Revenue</TableCell>
             <TableCell align="right">Revenue Increase%</TableCell>
             <TableCell align="right">Adjusted Revenue</TableCell>

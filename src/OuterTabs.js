@@ -5,8 +5,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segmentation} from './Inputs';
-import InnerTabs from './InnerTabs';
+import {Salesperson,Segmentation,MonthYearPicker} from './Inputs';
+import DateTabs from './DateTabs';
+// import { addDays } from 'date-fns';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,6 +66,21 @@ export default function OuterTabs() {
     setSalesperson(event.target.value);
   };
 
+  // for date picks
+  const [startDate, setStartDate] = React.useState(new Date());
+
+  const handleStartDateChange = (startDate) => {
+    setStartDate(startDate);
+    console.log(`start: ${startDate}`)
+  };
+
+  const [endDate, setEndDate] = React.useState(new Date());
+
+  const handleEndDateChange = (endDate) => {
+    setEndDate(endDate);
+    console.log(`end: ${endDate}`)
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -80,7 +96,13 @@ export default function OuterTabs() {
             <Segmentation changer={handleSegmentChange} value={segments}/>
             <Salesperson changer={handleSalespersonChange} value={salesperson}/>
           </Stack>
-          <InnerTabs segments={segments} salesperson={salesperson}/>
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={2}>
+              <MonthYearPicker label="Start Date" date={startDate} setDate={handleStartDateChange} minDate={new Date()}/>
+              <MonthYearPicker label="End Date" date={endDate} setDate={handleEndDateChange} minDate={startDate}/>
+            </Stack>
+            <DateTabs startDate={startDate} endDate={endDate} segments={segments} salesperson={salesperson}/>
+          </Stack>
         </Stack>
       </TabPanel>
       <TabPanel value={value} index={1}>
