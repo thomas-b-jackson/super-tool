@@ -1,13 +1,16 @@
-import {getSums} from './Report';
+import {getSegmentSums} from './Report';
+import {getAccountData} from './Data';
 
-test('revenue summing', () => {
-  let sums = getSums(accountData);
-  expect(sums.Revenue==194).toBe(true);
+test('t-mobile revenue summing', () => {
+  let segment = "T-Mobile"
+  let sums = getSegmentSums(segment,getAccountData([segment], "", accountData));
+  expect(sums.revenue).toBe(62);
 });
 
-test('target summing', () => {
-  let sums = getSums(accountData);
-  expect(sums.TargetRevenue==214).toBe(true);
+test('microsoft target summing', () => {
+  let segment = "Microsoft"
+  let sums = getSegmentSums(segment,getAccountData([segment], "", accountData));
+  expect(sums.targetRevenue).toBe(26);
 });
 
 const accountData = [
