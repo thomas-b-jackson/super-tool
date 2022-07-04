@@ -1,46 +1,12 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import {Salesperson,Segmentation,MonthYearPicker} from './Inputs';
 import DateTabs from './DateTabs';
-// import { addDays } from 'date-fns';
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+import {TabPanel,a11yProps} from './TabPanel'
+import { queryPowerBI } from './PowerBi';
 
 export default function OuterTabs() {
   const [value, setValue] = React.useState(0);
@@ -81,6 +47,20 @@ export default function OuterTabs() {
     console.log(`end: ${endDate}`)
   };
 
+  // const [accountData, setAccountData] = React.useState(null);
+
+  // // re-load power bi data on app load and again on every page refresh
+  // // TODO: this doesn't work ... gets called lots
+  // acquireTokenSilent({
+  //   test: "b",
+  //   account: "a"
+  // }).then((response) => {      
+  //     queryPowerBI(response.accessToken).then(response => {
+  //       setAccountData(response.data);
+  //       console.log("rendering outer tabs")
+  //     });
+  // });
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -113,4 +93,12 @@ export default function OuterTabs() {
       </TabPanel>
     </Box>
   );
+}
+
+async function acquireTokenSilent(a,b) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({accessToken:"ABCD"});
+    }, 500);
+  });
 }
