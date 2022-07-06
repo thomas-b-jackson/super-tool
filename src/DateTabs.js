@@ -39,7 +39,11 @@ export default function DateTabs(props) {
       </Box>
       {getMonthYears(props.startDate,props.endDate).map((row, index) => (
         <TabPanel key={row} value={value} index={index}>
-          <ReportTabs key={props.segments} date={row} segments={props.segments} salesperson={props.salesperson} />
+          <ReportTabs key={props.segments} 
+                      date={row} 
+                      accountData={props.accountData} 
+                      segments={props.segments} 
+                      salesperson={props.salesperson} />
         </TabPanel>
       ))}
     </Box>

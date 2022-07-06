@@ -22,7 +22,9 @@ export default function InnerTabs(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <SummaryReport segments={props.segments} salesperson={props.salesperson}/>
+        <SummaryReport segments={props.segments} 
+                       salesperson={props.salesperson} 
+                       accountData={props.accountData}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         TBD

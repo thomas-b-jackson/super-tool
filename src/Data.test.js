@@ -22,7 +22,7 @@ test('multi-segment salesperson filtering works', () => {
 
 test('segment+salesperson filtering works', () => {
   let data = getAccountData("T-Mobile","jane",revenueData);
-  expect(data[0].name == "T-Mobile" && data.length==1).toBe(true);
+  expect(data[0].segment == "T-Mobile" && data.length==1).toBe(true);
 });
 
 test('get all segments works', () => {

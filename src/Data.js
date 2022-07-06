@@ -7,11 +7,11 @@ export function getAccountData(segments, salesperson, accountDataForTest) {
   // filter by segment and salesperson
   if (segments && segments.length > 0 && salesperson) {
     return revenueData.filter( (item) => {
-      return segments.includes(item.name) && item.salesperson === salesperson;
+      return segments.includes(item.segment) && item.salesperson === salesperson;
     })
   } else if (segments && segments.length > 0 && !salesperson) {
     return revenueData.filter( (item) => {
-      return segments.includes(item.name);
+      return segments.includes(item.segment);
     })
   } else if ((!segments || (segments && segments.length === 0)) && salesperson) {
     return revenueData.filter( (item) => {
@@ -29,7 +29,7 @@ export function getSegments(segments, salesperson, accountDataForTest) {
                                        : getAccountData(segments, salesperson)
 
   revenueData.forEach(item => {
-    uniqueSegments.add(item.name)
+    uniqueSegments.add(item.segment)
   })
 
   return Array.from(uniqueSegments)
@@ -39,7 +39,7 @@ export function getSegments(segments, salesperson, accountDataForTest) {
 const accountDataQuery = [
   {
     account: 'atlas',
-    name: "T-Mobile",
+    segment: "T-Mobile",
     revenue: 10,
     targetRevenue: 13,
     salesperson: "jane",
@@ -47,7 +47,7 @@ const accountDataQuery = [
   },
   {
     account: 'expert assist',
-    name: "T-Mobile",
+    segment: "T-Mobile",
     revenue: 52,
     targetRevenue: 60,
     salesperson: "jane",
@@ -55,7 +55,7 @@ const accountDataQuery = [
   },
   {
     account: 'digital marketing',
-    name: "Microsoft",
+    segment: "Microsoft",
     revenue: 19,
     targetRevenue: 18,
     salesperson: "joe",
@@ -63,7 +63,7 @@ const accountDataQuery = [
   },
   {
     account: 'azure analytics',
-    name: "Microsoft",
+    segment: "Microsoft",
     revenue: 6,
     targetRevenue: 8,
     salesperson: "joey",
@@ -71,7 +71,7 @@ const accountDataQuery = [
   },
   {
     account: 'myaccount re-arch',
-    name: "Sempra",
+    segment: "Sempra",
     revenue: 99,
     targetRevenue: 105,
     salesperson: "ben",
@@ -79,7 +79,7 @@ const accountDataQuery = [
   },
   {
     account: 'digital fortress',
-    name: "Sempra",
+    segment: "Sempra",
     revenue: 4,
     targetRevenue: 5,
     salesperson: "ben",

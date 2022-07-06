@@ -39,7 +39,7 @@ export function getSegmentSums(segment, accountData, debug) {
   let accountsAdjustedRevenue = accountData.reduce( (sum, item) => {
 
     // calc adjusted revenue across accounts
-    let accountIncreaseValue = getPersistedValue(item.name, item.account)
+    let accountIncreaseValue = getPersistedValue(item.segment, item.account)
 
     return sum + parseInt(getAdjustedRevenue(item.revenue,accountIncreaseValue)) 
     }, 0
@@ -124,7 +124,7 @@ function TotalsRow(props) {
   let sums = new Sums()
   
   props.segments.forEach(segment => {
-    let revenueData = getAccountData([segment], props.salesperson)
+    let revenueData = getAccountData([segment], props.salesperson, props.accountData)
     
     sums.add(getSegmentSums(segment,revenueData,"totals"))
   })
@@ -192,7 +192,7 @@ export default function SummaryReport(props) {
   // for triggering refreshes of the totals row based on slider changes
   const [trigger, setTrigger] = React.useState(0);
 
-  let activeSegments = getSegments(props.segments,props.salesperson)
+  let activeSegments = getSegments(props.segments,props.salesperson,props.accountData)
 
   return (
     <TableContainer component={Paper}>
@@ -210,7 +210,10 @@ export default function SummaryReport(props) {
         </TableHead>
         <TableBody>
           {activeSegments.map((segment) => (
-            <Row key={segment} segment={segment} rows={getAccountData([segment],props.salesperson)} summaryTrigger={setTrigger}/>
+            <Row key={segment} 
+                 segment={segment} 
+                 rows={getAccountData([segment],props.salesperson,props.accountData)} 
+                 summaryTrigger={setTrigger}/>
           ))}
           <TotalsRow segments={activeSegments} salesperson={props.salesperson} trigger={trigger}/>
         </TableBody>
