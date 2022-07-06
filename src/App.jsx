@@ -13,6 +13,7 @@ const AuthenticatedContent = () => {
     const [accountData, setAccountData] = useState(null);
     const [allSegments, setAllSegments] = useState(null);
     const [allSalespersons, setAllSalespersons] = useState(null);
+    const [allEffectiveDates, setAllEffectiveDates] = useState(null);
 
     function RequestAccountData() {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -26,7 +27,7 @@ const AuthenticatedContent = () => {
                 setAccountData(normalizedAccountData.data)
                 setAllSegments(normalizedAccountData.allSegments)
                 setAllSalespersons(normalizedAccountData.allSalespersons)
-                console.log("setting account data")
+                setAllEffectiveDates(normalizedAccountData.allEffectiveDates)
               } else {
                 console.log("could not load account data")
               } 
@@ -36,10 +37,11 @@ const AuthenticatedContent = () => {
 
     return (
         <>
-            { (accountData && allSegments && allSalespersons) ? 
+            { (accountData && allSegments && allSalespersons && allEffectiveDates) ? 
                 <OuterTabs accountData={accountData} 
                            allSegments={allSegments} 
-                           allSalespersons={allSalespersons}/>
+                           allSalespersons={allSalespersons}
+                           allEffectiveDates={allEffectiveDates}/>
                 :
                 <Button variant="secondary" onClick={RequestAccountData}>Load Account Data From PowerBi</Button>
             }
@@ -48,7 +50,8 @@ const AuthenticatedContent = () => {
 };
 
 /**
- * If a user is authenticated the AuthenticatedContent component above is rendered. Otherwise a message indicating a user is not authenticated is rendered.
+ * If a user is authenticated the AuthenticatedContent component above is rendered. 
+ * Otherwise a message indicating a user is not authenticated is rendered.
  */
 export default function App() {
     return (
@@ -59,7 +62,7 @@ export default function App() {
               </AuthenticatedTemplate>
 
               <UnauthenticatedTemplate>
-                  <Typography>Please sign-in to view account data from Power BI</Typography>
+                  <Typography>Please sign-in to analyze data provided by Power BI</Typography>
               </UnauthenticatedTemplate>
           </div>
         </PageLayout>

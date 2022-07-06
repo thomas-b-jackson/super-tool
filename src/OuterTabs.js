@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segments,MonthYearPicker} from './Inputs';
+import {Salesperson,Segments,MonthYearPicker,EffectiveDate} from './Inputs';
 import DateTabs from './DateTabs';
 import {TabPanel,a11yProps} from './TabPanel'
 import RawDataTable from "./components/RawDataTable";
@@ -33,6 +33,13 @@ export default function OuterTabs(props) {
     setSalesperson(event.target.value);
   };
 
+  // for effective date pick
+  const [effectiveDate, setEffectiveDate] = React.useState('');
+
+  const handleEffectiveDateChange = (event) => {
+   setEffectiveDate(event.target.value);
+  };
+
   // for date picks
   const [startDate, setStartDate] = React.useState(new Date());
 
@@ -45,6 +52,8 @@ export default function OuterTabs(props) {
   const handleEndDateChange = (endDate) => {
     setEndDate(endDate);
   };
+
+  console.log(`all dates: ${props.allEffectiveDates}`)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -64,6 +73,9 @@ export default function OuterTabs(props) {
             <Salesperson changer={handleSalespersonChange} 
                          value={salesperson}
                          allSalespersons={props.allSalespersons}/>
+            <EffectiveDate changer={handleEffectiveDateChange} 
+                           value={effectiveDate}
+                           allEffectiveDates={props.allEffectiveDates}/>
           </Stack>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2}>

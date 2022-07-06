@@ -11,12 +11,7 @@ import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-function EffectiveDate() {
-  const [effectiveDate, setEffectiveDate] = React.useState('');
-
-  const handleChange = (event) => {
-   setEffectiveDate(event.target.value);
-  };
+function EffectiveDate(props) {
 
   return (
     <Box sx={{ minWidth: 150 }}>
@@ -25,13 +20,13 @@ function EffectiveDate() {
         <Select
           labelId="effective-date-label"
           id="effective-date"
-          value={effectiveDate}
+          value={props.value}
           label="Effective Date"
-          onChange={handleChange}
+          onChange={props.changer}
         >
-          <MenuItem value={10}>Dec</MenuItem>
-          <MenuItem value={20}>Jan</MenuItem>
-          <MenuItem value={30}>Feb</MenuItem>
+          {props.allEffectiveDates.map(effectiveDate => (
+              <MenuItem value={effectiveDate}>{effectiveDate}</MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>

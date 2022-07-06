@@ -71,6 +71,12 @@ const headCells = [
     label: 'Salesperson',
   },
   {
+    id: 'effectiveDate',
+    numeric: false,
+    disablePadding: false,
+    label: 'Effective Date',
+  },  
+  {
     id: 'monthyear',
     numeric: false,
     disablePadding: false,
@@ -195,7 +201,8 @@ export default function RawDataTable(props) {
                       <TableCell align="right">{row.practice}</TableCell>
                       <TableCell align="right">{row.segment}</TableCell>
                       <TableCell align="right">{row.salesperson}</TableCell>
-                      <TableCell align="right">{row.monthYear}</TableCell>
+                      <TableCell align="right">{row.effectiveDate}</TableCell>
+                      <TableCell align="right">{row.monthYear}</TableCell>                      
                       <TableCell align="right">{row.revenue}</TableCell>
                       <TableCell align="right">{row.targetRevenue}</TableCell>
                     </TableRow>

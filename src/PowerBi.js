@@ -39,14 +39,17 @@ export function NormalizeData(rawResults) {
   let salespersonSet = new Set()
   let normalizedData = {}
 
+  let options = { year: 'numeric', month: 'long', day: 'numeric' };
+
   if (rawResults && rawResults.results[0] && rawResults.results[0].tables[0] &&
     rawResults.results[0].tables[0].rows) {
 
     normalizedData = rawResults.results[0].tables[0].rows.map((item) => {
 
       segmentSet.add(item["weekly person[Segmentation]"])
-      effectiveDateSet.add(item["weekly person[Effective Date]"])
       salespersonSet.add(item["weekly person[Salesperson]"])
+      let effectiveDate = item["weekly person[Effective Date]"] ? (new Date(item["weekly person[Effective Date]"])).toLocaleString('en-US',options) : null
+      effectiveDateSet.add(effectiveDate)
 
       return {
         account: item["weekly person[Account]"],
@@ -56,7 +59,7 @@ export function NormalizeData(rawResults) {
         monthYear: item["weekly person[Month Year]"],
         revenue: item["weekly person[Revenue]"] ? parseInt(item["weekly person[Revenue]"]) : 0,
         targetRevenue: item["weekly person[Target Revenue]"] ? parseInt(item["weekly person[Target Revenue]"]) : 0,
-        effectiveDate: item["weekly person[Effective Date]"] ? Date.parse(item["weekly person[Effective Date]"]) : null
+        effectiveDate: effectiveDate
       }
     })
 

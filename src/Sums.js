@@ -13,22 +13,6 @@ export class Sums {
     this.adjustedRevenue += sums.adjustedRevenue
   }
 
-  addSegment(value) {
-    this.segments.push(value)
-  }
-
-  addRevenue(value) {
-    this.revenue += value
-  }
-
-  addAdjustedRevenue(value) {
-    this.adjustedRevenue += value
-  }
-
-  addTargetRevenue(value) {
-    this.targetRevenue += value
-  }
-
   toString() {
     return `revenue: ${this.revenue}, adjustedRevenue: ${this.adjustedRevenue}`
   }
