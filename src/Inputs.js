@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
-import {getSegments} from './Data';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -53,9 +52,9 @@ function Salesperson(props) {
           value={props.value}
         >
           <MenuItem value=""><em>None</em></MenuItem>
-          <MenuItem value="jane">jane</MenuItem>
-          <MenuItem value="joe">joe</MenuItem>
-          <MenuItem value="ben">ben</MenuItem>
+          {props.allSalespersons.map(salesperson => (
+              <MenuItem value={salesperson}>{salesperson}</MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>
@@ -83,7 +82,7 @@ function getStyles(segment, segments, theme) {
   };
 }
 
-function Segmentation(props) {
+function Segments(props) {
 
   const theme = useTheme()
 
@@ -100,7 +99,7 @@ function Segmentation(props) {
           value={props.value}
           MenuProps={MenuProps}
         >
-          {getSegments().map((segment) => (
+          {props.allSegments.map((segment) => (
             <MenuItem
               key={segment}
               value={segment}
@@ -166,4 +165,4 @@ function MonthYearPicker(props) {
   );
 }
 
-export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,MonthYearPicker}
+export {Salesperson,EffectiveDate,Segments,PercentIncrease,MonthYearPicker}

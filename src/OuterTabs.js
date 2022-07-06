@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segmentation,MonthYearPicker} from './Inputs';
+import {Salesperson,Segments,MonthYearPicker} from './Inputs';
 import DateTabs from './DateTabs';
 import {TabPanel,a11yProps} from './TabPanel'
 import RawDataTable from "./components/RawDataTable";
@@ -58,8 +58,12 @@ export default function OuterTabs(props) {
       <TabPanel value={value} index={0}>
         <Stack direction="row" spacing={2}>
           <Stack spacing={2}>
-            <Segmentation changer={handleSegmentChange} value={segments}/>
-            <Salesperson changer={handleSalespersonChange} value={salesperson}/>
+            <Segments changer={handleSegmentChange} 
+                      value={segments} 
+                      allSegments={props.allSegments}/>
+            <Salesperson changer={handleSalespersonChange} 
+                         value={salesperson}
+                         allSalespersons={props.allSalespersons}/>
           </Stack>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2}>

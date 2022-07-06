@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {PercentIncrease} from './Inputs';
-import {getAccountData,getSegments} from './Data';
+import {getRelevantAccountData,getRelevantSegments} from './DataNew';
 import {persistState,getPersistedValue} from './store';
 import {Sums} from './Sums'
 
@@ -22,33 +22,33 @@ export function getSegmentSums(segment, accountData, debug) {
 
   let sums = new Sums()
 
-  // TODO: sums.segments isn't used, so delete addSegment method
-  sums.addSegment(segment)
+  if (accountData) {
 
-  // sum revenue
-  sums.revenue = accountData.reduce( (sum, item) => {
-    return sum + item.revenue
+    // sum revenue
+    sums.revenue = accountData.reduce( (sum, item) => {
+      return sum + item.revenue
+      }, 0)
+
+    // sum target revenue 
+    sums.targetRevenue =accountData.reduce( (sum, item) => {
+      return sum + item.targetRevenue
     }, 0)
 
-  // sum target revenue 
-  sums.targetRevenue =accountData.reduce( (sum, item) => {
-    return sum + item.targetRevenue
-  }, 0)
+    // sum adjusted revenue
+    let accountsAdjustedRevenue = accountData.reduce( (sum, item) => {
 
-  // sum adjusted revenue
-  let accountsAdjustedRevenue = accountData.reduce( (sum, item) => {
+      // calc adjusted revenue across accounts
+      let accountIncreaseValue = getPersistedValue(item.segment, item.account)
 
-    // calc adjusted revenue across accounts
-    let accountIncreaseValue = getPersistedValue(item.segment, item.account)
+      return sum + parseInt(getAdjustedRevenue(item.revenue,accountIncreaseValue)) 
+      }, 0
+    )
 
-    return sum + parseInt(getAdjustedRevenue(item.revenue,accountIncreaseValue)) 
-    }, 0
-  )
+    // next apply segment-level adjustment
+    let segmentIncreaseValue = getPersistedValue(segment)
 
-  // next apply segment-level adjustment
-  let segmentIncreaseValue = getPersistedValue(segment)
-
-  sums.adjustedRevenue = parseInt(getAdjustedRevenue(accountsAdjustedRevenue,segmentIncreaseValue))
+    sums.adjustedRevenue = parseInt(getAdjustedRevenue(accountsAdjustedRevenue,segmentIncreaseValue))      
+  }
 
   return sums
 }
@@ -124,7 +124,10 @@ function TotalsRow(props) {
   let sums = new Sums()
   
   props.segments.forEach(segment => {
-    let revenueData = getAccountData([segment], props.salesperson, props.accountData)
+    let revenueData = getRelevantAccountData(props.accountData, 
+                                             [segment], 
+                                             props.salesperson,
+                                             props.monthYear)
     
     sums.add(getSegmentSums(segment,revenueData,"totals"))
   })
@@ -190,9 +193,12 @@ function Row(props) {
 export default function SummaryReport(props) {
 
   // for triggering refreshes of the totals row based on slider changes
-  const [trigger, setTrigger] = React.useState(0);
+  const [trigger, setTrigger] = React.useState(0);                                           
 
-  let activeSegments = getSegments(props.segments,props.salesperson,props.accountData)
+  let activeSegments = getRelevantSegments(props.accountData, 
+                                           props.segments,
+                                           props.salesperson,
+                                           props.monthYear)
 
   return (
     <TableContainer component={Paper}>
@@ -212,10 +218,16 @@ export default function SummaryReport(props) {
           {activeSegments.map((segment) => (
             <Row key={segment} 
                  segment={segment} 
-                 rows={getAccountData([segment],props.salesperson,props.accountData)} 
+                 rows={getRelevantAccountData(props.accountData, 
+                                             [segment], 
+                                             props.salesperson,
+                                             props.monthYear)} 
                  summaryTrigger={setTrigger}/>
           ))}
-          <TotalsRow segments={activeSegments} salesperson={props.salesperson} trigger={trigger}/>
+          <TotalsRow segments={activeSegments} 
+                     salesperson={props.salesperson} 
+                     monthYear={props.monthYear} 
+                     trigger={trigger}/>
         </TableBody>
       </Table>
     </TableContainer>

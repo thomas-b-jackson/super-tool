@@ -32,15 +32,15 @@ export default function DateTabs(props) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="inner-tabs">
-          {getMonthYears(props.startDate,props.endDate).map((row, index) => (
-              <Tab key={row} label={row} {...a11yProps(index)}/>
+          {getMonthYears(props.startDate,props.endDate).map((monthYear, index) => (
+              <Tab key={monthYear} label={monthYear} {...a11yProps(index)}/>
             ))}          
         </Tabs>
       </Box>
-      {getMonthYears(props.startDate,props.endDate).map((row, index) => (
-        <TabPanel key={row} value={value} index={index}>
+      {getMonthYears(props.startDate,props.endDate).map((monthYear, index) => (
+        <TabPanel key={monthYear} value={value} index={index}>
           <ReportTabs key={props.segments} 
-                      date={row} 
+                      monthYear={monthYear} 
                       accountData={props.accountData} 
                       segments={props.segments} 
                       salesperson={props.salesperson} />

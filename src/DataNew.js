@@ -1,16 +1,17 @@
-export function getAccountData(segments, salesperson, accountDataForTest) {
+export function getRelevantAccountData(revenueData,
+                                        segments, 
+                                        salesperson, 
+                                        monthYear,
+                                        effectiveDate) {
 
-  // input revenue data to support unit testing, o.w. get
-  // data from query
-  let revenueData = accountDataForTest ? accountDataForTest.slice() : accountDataQuery.slice()
-  
-  // filter by segment and salesperson
-  return revenueData.filter( (item) => {
-      return (segmentFilter(item, segments) && salesPersonFilter(item, salesperson));
-  })
+  return revenueData ? revenueData.filter( (item) => {
+                  return (segmentCheck(item, segments) && 
+                          salesPersonCheck(item, salesperson) &&
+                          monthYearCheck(item, monthYear))
+                }) : null
 };
 
-function segmentFilter(item, segments) {
+function segmentCheck(item, segments) {
   if (segments && segments.length && segments.includes(item.segment)) {
     return true
   } else if (!segments || (segments && segments.length === 0)) {
@@ -20,21 +21,49 @@ function segmentFilter(item, segments) {
   }
 }
 
-function salesPersonFilter(item, salesperson) {
+function salesPersonCheck(item, salesperson) {
   if (salesperson && item.salesperson === salesperson) {
     return true
-  } else if (!salesperson) {
+  } else if (!salesperson || salesperson=="") {
     return true
   } else {
     return false
   }
 }
 
-export function getSegments(segments, salesperson, accountDataForTest) {
+function monthYearCheck(item, monthYear) {
+  if (monthYear && item.monthYear === monthYear) {
+    return true
+  } else if (!monthYear || monthYear=="") {
+    return true
+  } else {   
+    return false
+  }
+}
+
+function effectiveDateCheck(item, effectiveDate) {
+  if (effectiveDate && item.effectiveDate === effectiveDate) {
+    return true
+  } else if (!effectiveDate) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export function getRelevantSegments(accountData, 
+                            segments, 
+                            salesperson, 
+                            monthYear,
+                            effectiveDate) {
+
   let uniqueSegments = new Set()
 
-  let revenueData = accountDataForTest ? getAccountData(segments, salesperson, accountDataForTest)
-                                       : getAccountData(segments, salesperson)
+  let revenueData = getRelevantAccountData(accountData, 
+                                           segments, 
+                                           salesperson, 
+                                           monthYear,
+                                           effectiveDate)
 
   revenueData.forEach(item => {
     uniqueSegments.add(item.segment)
