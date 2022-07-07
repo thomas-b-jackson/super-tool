@@ -1,63 +1,63 @@
 import {getSegmentSums} from './Report';
-import {getAccountData} from './Data';
+import {getRelevantAccountData} from './Data';
 
 test('t-mobile revenue summing', () => {
   let segment = "T-Mobile"
-  let sums = getSegmentSums(segment,getAccountData([segment], "", accountData));
+  let sums = getSegmentSums(segment,getRelevantAccountData(accountData, [segment], ""));
   expect(sums.revenue).toBe(62);
 });
 
 test('microsoft target summing', () => {
   let segment = "Microsoft"
-  let sums = getSegmentSums(segment,getAccountData([segment], "", accountData));
+  let sums = getSegmentSums(segment,getRelevantAccountData(accountData, [segment], ""));
   expect(sums.targetRevenue).toBe(26);
 });
 
 const accountData = [
   {
-    name: "T-Mobile",
+    segment: "T-Mobile",
     account: 'atlas',
     revenue: 10,
     targetRevenue: 13,
     salesperson: "jane"
   },
   {
-    name: "T-Mobile",
+    segment: "T-Mobile",
     account: 'expert assist',
     revenue: 52,
     targetRevenue: 60,
     salesperson: "janey"
   },
   {
-    name: "Microsoft",
+    segment: "Microsoft",
     account: 'digital marketing',
     revenue: 19,
     targetRevenue: 18,
     salesperson: "joe"
   },
   {
-    name: "Microsoft",
+    segment: "Microsoft",
     account: 'azure analytics',
     revenue: 6,
     targetRevenue: 8,
     salesperson: "joey"
   },
   {
-    name: "Sempra",
+    segment: "Sempra",
     account: 'myaccount re-arch',
     revenue: 99,
     targetRevenue: 105,
     salesperson: "ben"
   },
   {
-    name: "Sempra",
+    segment: "Sempra",
     account: 'digital fortress',
     revenue: 4,
     targetRevenue: 5,
     salesperson: "ben"
   },
   {
-    name: "Sempra",
+    segment: "Sempra",
     account: 'digital fortress part two',
     revenue: 4,
     targetRevenue: 5,

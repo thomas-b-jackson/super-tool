@@ -26,20 +26,24 @@ export default function DateTabs(props) {
     });
   }
 
-  // console.log(`${props.startDate} ${props.endDate}`)
-  // console.log(getMonthYears(props.startDate,props.endDate))
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="inner-tabs">
-          {getMonthYears(props.startDate,props.endDate).map((row, index) => (
-              <Tab key={row} label={row} {...a11yProps(index)}/>
+          {getMonthYears(props.startDate,props.endDate).map((monthYear, index) => (
+              <Tab key={monthYear} label={monthYear} {...a11yProps(index)}/>
             ))}          
         </Tabs>
       </Box>
-      {getMonthYears(props.startDate,props.endDate).map((row, index) => (
-        <TabPanel key={row} value={value} index={index}>
-          <ReportTabs key={props.segments} date={row} segments={props.segments} salesperson={props.salesperson} />
+      {getMonthYears(props.startDate,props.endDate).map((monthYear, index) => (
+        <TabPanel key={monthYear} value={value} index={index}>
+          <ReportTabs key={props.segments} 
+                      monthYear={monthYear} 
+                      accountData={props.accountData} 
+                      segments={props.segments} 
+                      salesperson={props.salesperson}
+                      effectiveDate={props.effectiveDate}
+                      practice={props.practice} />
         </TabPanel>
       ))}
     </Box>

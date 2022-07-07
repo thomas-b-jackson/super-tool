@@ -6,18 +6,12 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import { useTheme } from '@mui/material/styles';
-import {getSegments} from './Data';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-function EffectiveDate() {
-  const [effectiveDate, setEffectiveDate] = React.useState('');
-
-  const handleChange = (event) => {
-   setEffectiveDate(event.target.value);
-  };
+function EffectiveDate(props) {
 
   return (
     <Box sx={{ minWidth: 150 }}>
@@ -26,13 +20,36 @@ function EffectiveDate() {
         <Select
           labelId="effective-date-label"
           id="effective-date"
-          value={effectiveDate}
+          value={props.value}
           label="Effective Date"
-          onChange={handleChange}
+          onChange={props.changer}
         >
-          <MenuItem value={10}>Dec</MenuItem>
-          <MenuItem value={20}>Jan</MenuItem>
-          <MenuItem value={30}>Feb</MenuItem>
+          {props.allEffectiveDates.map(effectiveDate => (
+              <MenuItem value={effectiveDate}>{effectiveDate}</MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+
+function PracticeArea(props) {
+
+  return (
+    <Box sx={{ minWidth: 150 }}>
+      <FormControl fullWidth>
+        <InputLabel id="practice-label">Practice</InputLabel>
+        <Select
+          labelId="practice-label"
+          id="practice"
+          label="Practice"
+          onChange={props.changer}
+          value={props.value}
+        >
+          <MenuItem value=""><em>None</em></MenuItem>
+          {props.allPracticeAreas.map(practiceArea => (
+              <MenuItem value={practiceArea}>{practiceArea}</MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>
@@ -53,9 +70,9 @@ function Salesperson(props) {
           value={props.value}
         >
           <MenuItem value=""><em>None</em></MenuItem>
-          <MenuItem value="jane">jane</MenuItem>
-          <MenuItem value="joe">joe</MenuItem>
-          <MenuItem value="ben">ben</MenuItem>
+          {props.allSalespersons.map(salesperson => (
+              <MenuItem value={salesperson}>{salesperson}</MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>
@@ -83,7 +100,7 @@ function getStyles(segment, segments, theme) {
   };
 }
 
-function Segmentation(props) {
+function Segments(props) {
 
   const theme = useTheme()
 
@@ -100,7 +117,7 @@ function Segmentation(props) {
           value={props.value}
           MenuProps={MenuProps}
         >
-          {getSegments().map((segment) => (
+          {props.allSegments.map((segment) => (
             <MenuItem
               key={segment}
               value={segment}
@@ -166,4 +183,4 @@ function MonthYearPicker(props) {
   );
 }
 
-export {Salesperson,EffectiveDate,Segmentation,PercentIncrease,MonthYearPicker}
+export {Salesperson,EffectiveDate,Segments,PercentIncrease,MonthYearPicker,PracticeArea}
