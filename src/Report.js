@@ -16,6 +16,7 @@ import {PercentIncrease} from './Inputs';
 import {getRelevantAccountData,getRelevantSegments} from './Data';
 import {persistState,getPersistedValue} from './store';
 import {Sums} from './Sums'
+import { useTheme } from '@mui/material/styles';
 
 export default function SummaryReport(props) {
 
@@ -192,17 +193,19 @@ function TotalsRow(props) {
     sums.add(getSegmentSums(segment,revenueData,"totals"))
   })
 
-  
+  // text in totals row should be bolded
+  const totalsFontStyle = {fontWeight: useTheme().typography.fontWeightBold}
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell/>
-        <TableCell component="th" scope="row">Totals</TableCell>
-        <TableCell align="right">{sums.revenue}</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">{sums.adjustedRevenue}</TableCell>
-        <TableCell align="right">{sums.targetRevenue}</TableCell>
-        <TableCell align="right">{sums.adjustedRevenue-sums.targetRevenue}</TableCell>
+        <TableCell component="th" scope="row"><Typography style={totalsFontStyle}>Totals</Typography></TableCell>
+        <TableCell align="right"><Typography style={totalsFontStyle}>{sums.revenue}</Typography></TableCell>
+        <TableCell align="right"><Typography style={totalsFontStyle}>n/a</Typography></TableCell>
+        <TableCell align="right"><Typography style={totalsFontStyle}>{sums.adjustedRevenue}</Typography></TableCell>
+        <TableCell align="right"><Typography style={totalsFontStyle}>{sums.targetRevenue}</Typography></TableCell>
+        <TableCell align="right"><Typography style={totalsFontStyle}>{sums.adjustedRevenue-sums.targetRevenue}</Typography></TableCell>
       </TableRow>
     </React.Fragment>
   );

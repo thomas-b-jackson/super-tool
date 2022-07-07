@@ -11,11 +11,12 @@ import { LogLevel } from "@azure/msal-browser";
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md 
  */
 
-// azure AD tenant id: d513ec41-c5ae-4017-810e-fdca680bdc77
 export const msalConfig = {
     auth: {
+        // ID of the "super-tool" app in azure app registrations
         clientId: "eb49b8bc-4209-4399-93b9-d32ea02286a1",
         authority: "https://login.microsoftonline.com/common",
+        // use localhost for local development
         redirectUri: "http://localhost:3000/"
         // redirectUri: "https://d58cyh9eofbyu.cloudfront.net"
     },
@@ -52,8 +53,7 @@ export const msalConfig = {
 };
 
 /**
- * Scopes you add here will be prompted for user consent during sign-in.
- * By default, MSAL.js will add OIDC scopes (openid, profile, email) to any login request.
+ * Need read access to Power BI
  * For more information about OIDC scopes, visit: 
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
@@ -61,13 +61,19 @@ export const loginRequest = {
     scopes: ["https://analysis.windows.net/powerbi/api/Dataset.Read.All"]
 };
 
-/**
- * Add here the scopes to request when obtaining an access token for MS Graph API. For more information, see:
- * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
- */
+// ID of super tool dataset in power BI
+const superToolDatasetID = "c408cf9a-c91c-466b-8543-75a998ff04ca"
+
+// endpoint used to pull data from power BI
 export const powerBIQueryAPI = {
-    executeQueryEndpoint: "https://api.powerbi.com/v1.0/myorg/datasets/c408cf9a-c91c-466b-8543-75a998ff04ca/executeQueries"
+    executeQueryEndpoint: `https://api.powerbi.com/v1.0/myorg/datasets/${superToolDatasetID}/executeQueries`
 };
 
-// https://api.powerbi.com/v1.0/myorg/datasets/c408cf9a-c91c-466b-8543-75a998ff04ca/datasources
-// https://api.powerbi.com/v1.0/myorg/datasets/c408cf9a-c91c-466b-8543-75a998ff04ca/executeQueries
+export const defaultTargetMarginPercentage = 50;
+
+export const targetMarginPercentages = {
+  "T-Mobile": 40,
+  "Microsoft": 40,
+  "San Diego Gas & Electric": 45,
+  "Pacific Gas & Electric": 40
+};

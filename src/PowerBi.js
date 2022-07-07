@@ -18,7 +18,6 @@ export async function ExecuteQuery(accessToken) {
     "impersonatedUserName": "someuser@mycompany.com"
   }
 
-  // console.log(accessToken)
   headers.append("Authorization", bearer);
   headers.append("Content-Type", "application/json");
 
@@ -40,8 +39,6 @@ export function NormalizeData(rawResults) {
   let salespersonSet = new Set()
   let practiceAreaSet = new Set()
   let normalizedData = {}
-
-  
 
   if (rawResults && rawResults.results[0] && rawResults.results[0].tables[0] &&
     rawResults.results[0].tables[0].rows) {
