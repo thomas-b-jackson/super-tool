@@ -33,6 +33,29 @@ function EffectiveDate(props) {
   );
 }
 
+function PracticeArea(props) {
+
+  return (
+    <Box sx={{ minWidth: 150 }}>
+      <FormControl fullWidth>
+        <InputLabel id="practice-label">Practice</InputLabel>
+        <Select
+          labelId="practice-label"
+          id="practice"
+          label="Practice"
+          onChange={props.changer}
+          value={props.value}
+        >
+          <MenuItem value=""><em>None</em></MenuItem>
+          {props.allPracticeAreas.map(practiceArea => (
+              <MenuItem value={practiceArea}>{practiceArea}</MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+
 function Salesperson(props) {
 
   return (
@@ -160,4 +183,4 @@ function MonthYearPicker(props) {
   );
 }
 
-export {Salesperson,EffectiveDate,Segments,PercentIncrease,MonthYearPicker}
+export {Salesperson,EffectiveDate,Segments,PercentIncrease,MonthYearPicker,PracticeArea}

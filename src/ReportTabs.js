@@ -25,7 +25,9 @@ export default function ReportTabs(props) {
         <SummaryReport segments={props.segments} 
                        salesperson={props.salesperson} 
                        accountData={props.accountData}
-                       monthYear={props.monthYear}/>
+                       monthYear={props.monthYear}
+                       effectiveDate={props.effectiveDate}
+                       practice={props.practice}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         TBD

@@ -14,6 +14,7 @@ const AuthenticatedContent = () => {
     const [allSegments, setAllSegments] = useState(null);
     const [allSalespersons, setAllSalespersons] = useState(null);
     const [allEffectiveDates, setAllEffectiveDates] = useState(null);
+    const [allPracticeAreas, setAllPracticeAreas] = useState(null);
 
     function RequestAccountData() {
         // Silently acquires an access token which is then attached to a request for MS Graph data
@@ -28,6 +29,8 @@ const AuthenticatedContent = () => {
                 setAllSegments(normalizedAccountData.allSegments)
                 setAllSalespersons(normalizedAccountData.allSalespersons)
                 setAllEffectiveDates(normalizedAccountData.allEffectiveDates)
+                setAllPracticeAreas(normalizedAccountData.allPracticeAreas)
+                console.log(`loaded ${normalizedAccountData.data.length} rows`)
               } else {
                 console.log("could not load account data")
               } 
@@ -37,11 +40,12 @@ const AuthenticatedContent = () => {
 
     return (
         <>
-            { (accountData && allSegments && allSalespersons && allEffectiveDates) ? 
+            { (accountData && allSegments && allSalespersons && allEffectiveDates && allPracticeAreas) ? 
                 <OuterTabs accountData={accountData} 
                            allSegments={allSegments} 
                            allSalespersons={allSalespersons}
-                           allEffectiveDates={allEffectiveDates}/>
+                           allEffectiveDates={allEffectiveDates}
+                           allPracticeAreas={allPracticeAreas}/>
                 :
                 <Button variant="secondary" onClick={RequestAccountData}>Load Account Data From PowerBi</Button>
             }

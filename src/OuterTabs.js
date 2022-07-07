@@ -3,10 +3,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {Salesperson,Segments,MonthYearPicker,EffectiveDate} from './Inputs';
+import {Salesperson,Segments,MonthYearPicker,EffectiveDate,PracticeArea} from './Inputs';
 import DateTabs from './DateTabs';
 import {TabPanel,a11yProps} from './TabPanel'
 import RawDataTable from "./components/RawDataTable";
+import {getLatestDate} from "./Data"
 
 export default function OuterTabs(props) {
 
@@ -33,11 +34,18 @@ export default function OuterTabs(props) {
     setSalesperson(event.target.value);
   };
 
-  // for effective date pick
-  const [effectiveDate, setEffectiveDate] = React.useState('');
+  // for effective date pick (should default to the latest date available)
+  const [effectiveDate, setEffectiveDate] = React.useState(getLatestDate(props.allEffectiveDates));
 
   const handleEffectiveDateChange = (event) => {
    setEffectiveDate(event.target.value);
+  };
+
+  // for practice pick
+  const [practice, setPractice] = React.useState('');
+
+  const handlePracticeChange = (event) => {
+    setPractice(event.target.value);
   };
 
   // for date picks
@@ -52,8 +60,6 @@ export default function OuterTabs(props) {
   const handleEndDateChange = (endDate) => {
     setEndDate(endDate);
   };
-
-  console.log(`all dates: ${props.allEffectiveDates}`)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -73,9 +79,12 @@ export default function OuterTabs(props) {
             <Salesperson changer={handleSalespersonChange} 
                          value={salesperson}
                          allSalespersons={props.allSalespersons}/>
+            <PracticeArea changer={handlePracticeChange} 
+                           value={practice}
+                           allPracticeAreas={props.allPracticeAreas}/>  
             <EffectiveDate changer={handleEffectiveDateChange} 
                            value={effectiveDate}
-                           allEffectiveDates={props.allEffectiveDates}/>
+                           allEffectiveDates={props.allEffectiveDates}/>        
           </Stack>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2}>
@@ -86,7 +95,9 @@ export default function OuterTabs(props) {
                       endDate={endDate} 
                       accountData={props.accountData} 
                       segments={segments} 
-                      salesperson={salesperson}/>
+                      salesperson={salesperson}
+                      effectiveDate={effectiveDate}
+                      practice={practice}/>
           </Stack>
         </Stack>
       </TabPanel>

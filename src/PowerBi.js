@@ -1,4 +1,5 @@
 import { powerBIQueryAPI } from "./authConfig";
+import {dateToString} from "./Data";
 
 export async function ExecuteQuery(accessToken) {
   const headers = new Headers();
@@ -37,9 +38,10 @@ export function NormalizeData(rawResults) {
   let segmentSet = new Set()
   let effectiveDateSet = new Set()
   let salespersonSet = new Set()
+  let practiceAreaSet = new Set()
   let normalizedData = {}
 
-  let options = { year: 'numeric', month: 'long', day: 'numeric' };
+  
 
   if (rawResults && rawResults.results[0] && rawResults.results[0].tables[0] &&
     rawResults.results[0].tables[0].rows) {
@@ -48,8 +50,9 @@ export function NormalizeData(rawResults) {
 
       segmentSet.add(item["weekly person[Segmentation]"])
       salespersonSet.add(item["weekly person[Salesperson]"])
-      let effectiveDate = item["weekly person[Effective Date]"] ? (new Date(item["weekly person[Effective Date]"])).toLocaleString('en-US',options) : null
+      let effectiveDate = item["weekly person[Effective Date]"] ? dateToString(item["weekly person[Effective Date]"]) : null
       effectiveDateSet.add(effectiveDate)
+      practiceAreaSet.add(item["weekly person[Practice]"])
 
       return {
         account: item["weekly person[Account]"],
@@ -68,6 +71,7 @@ export function NormalizeData(rawResults) {
       allSegments: Array.from(segmentSet),
       allSalespersons: Array.from(salespersonSet),
       allEffectiveDates: Array.from(effectiveDateSet),
+      allPracticeAreas: Array.from(practiceAreaSet)
     }
   }
   else {

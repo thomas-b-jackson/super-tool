@@ -13,7 +13,7 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {PercentIncrease} from './Inputs';
-import {getRelevantAccountData,getRelevantSegments} from './DataNew';
+import {getRelevantAccountData,getRelevantSegments} from './Data';
 import {persistState,getPersistedValue} from './store';
 import {Sums} from './Sums'
 
@@ -25,7 +25,9 @@ export default function SummaryReport(props) {
   let activeSegments = getRelevantSegments(props.accountData, 
                                            props.segments,
                                            props.salesperson,
-                                           props.monthYear)
+                                           props.monthYear,
+                                           props.effectiveDate,
+                                           props.practice)
 
   return (
     <TableContainer component={Paper}>
@@ -48,13 +50,17 @@ export default function SummaryReport(props) {
                  rows={getRelevantAccountData(props.accountData, 
                                              [segment], 
                                              props.salesperson,
-                                             props.monthYear)} 
+                                             props.monthYear,
+                                             props.effectiveDate,
+                                             props.practice)} 
                  summaryTrigger={setTrigger}/>
           ))}
           <TotalsRow accountData={props.accountData}
                      segments={activeSegments}
                      salesperson={props.salesperson}
                      monthYear={props.monthYear}
+                     effectiveDate={props.effectiveDate}
+                     practice={props.practice}
                      trigger={trigger}/>
         </TableBody>
       </Table>
@@ -80,6 +86,7 @@ function Row(props) {
                 <TableHead>
                   <TableRow>
                     <TableCell>Account</TableCell>
+                    <TableCell>Practice</TableCell>
                     <TableCell>Current Revenue</TableCell>
                     <TableCell align="right">Revenue Increase%</TableCell>
                     <TableCell align="right">Adjusted Revenue</TableCell>
@@ -89,7 +96,9 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   {rows.map((accountRow) => (
-                    <AccountRow row={accountRow} segment={props.segment} summaryTrigger={props.summaryTrigger}/>
+                    <AccountRow row={accountRow} 
+                                segment={props.segment} 
+                                summaryTrigger={props.summaryTrigger}/>
                   ))}
                 </TableBody>
               </Table>
@@ -158,6 +167,7 @@ function AccountRow(props) {
   return (
     <TableRow key={props.segment-accountRow.account}>
       <TableCell component="th" scope="row">{accountRow.account}</TableCell>
+      <TableCell>{accountRow.practice}</TableCell>
       <TableCell>{accountRow.revenue}</TableCell>
       <TableCell align="right"><PercentIncrease value={accountIncreaseValue} changer={handleAccountChange} default={accountIncreaseValue}/></TableCell>
       <TableCell align="right">{getAdjustedRevenue(accountRow.revenue,accountIncreaseValue)}</TableCell>
@@ -175,7 +185,9 @@ function TotalsRow(props) {
     let revenueData = getRelevantAccountData(props.accountData, 
                                              [segment], 
                                              props.salesperson,
-                                             props.monthYear)
+                                             props.monthYear,
+                                             props.effectiveDate,
+                                             props.practice)
     
     sums.add(getSegmentSums(segment,revenueData,"totals"))
   })

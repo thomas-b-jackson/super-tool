@@ -26,8 +26,6 @@ export default function DateTabs(props) {
     });
   }
 
-  // console.log(`${props.startDate} ${props.endDate}`)
-  // console.log(getMonthYears(props.startDate,props.endDate))
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -43,7 +41,9 @@ export default function DateTabs(props) {
                       monthYear={monthYear} 
                       accountData={props.accountData} 
                       segments={props.segments} 
-                      salesperson={props.salesperson} />
+                      salesperson={props.salesperson}
+                      effectiveDate={props.effectiveDate}
+                      practice={props.practice} />
         </TabPanel>
       ))}
     </Box>
